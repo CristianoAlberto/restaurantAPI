@@ -1,7 +1,6 @@
 import { Reserva } from "./ReservaEntity";
 import { AppDataSource } from "../../db";
 import { IReserva, IReturn } from "./ReservaInterface";
-import { where } from "underscore";
 export class ReservaRepository implements IReserva {
     private readonly reservaRepo = AppDataSource.getRepository(Reserva);
     async create(reserva: Reserva): Promise<IReturn<Reserva>> {

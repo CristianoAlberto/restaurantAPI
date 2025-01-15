@@ -1,5 +1,7 @@
 import { DataSource } from "typeorm";
 import { Reserva } from "../modules/Reserva/ReservaEntity";
+import { Mesa } from "../modules/Mesa/MesaEntity";
+import { Usuario } from "../modules/Usuario/UsuarioEntity";
 
 export const AppDataSource = new DataSource({
     type: "mysql", // Define o tipo de banco como MySQL
@@ -10,5 +12,5 @@ export const AppDataSource = new DataSource({
     database: process.env.MYSQL_DB, // Nome do banco de dados
     synchronize: true, // Sincroniza entidades com o banco (ideal desativar em produção)
     logging: true, // Ativa logs (ideal para desenvolvimento)
-    entities: [Reserva], // Entidades que serão usadas
+    entities: [Reserva, Mesa, Usuario], // Entidades que serão usadas
 });

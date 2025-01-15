@@ -1,12 +1,14 @@
-import { Column, Entity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ObjectIdColumn, ObjectId } from "typeorm";
+import { Column, Entity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ObjectIdColumn, ObjectId, PrimaryGeneratedColumn } from "typeorm";
 @Entity("Usuario")
-export class usuario {
-    @ObjectIdColumn()
-    id: ObjectId;
+export class Usuario {
+    @PrimaryGeneratedColumn()
+    id: number;
     @Column()
     name: string;
     @Column()
     password: string;
+    @Column()
+    email: string;
     @CreateDateColumn()
     createdAt: Date;
     @UpdateDateColumn()
@@ -14,7 +16,7 @@ export class usuario {
     @DeleteDateColumn()
     deletedAt: Date;
     constructor(
-        id: ObjectId,
+        id: number,
         name: string,
         password: string,
         createdAt: Date,
