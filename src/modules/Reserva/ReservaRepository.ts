@@ -5,24 +5,43 @@ export class ReservaRepository implements IReserva {
     private readonly reservaRepo = AppDataSource.getRepository(Reserva);
     async create(reserva: Reserva): Promise<IReturn<Reserva>> {
         try {
-            const findReserva = await this.reservaRepo.find({
+            const findReservas = await this.reservaRepo.find({
                 where: {
-                    clientNumber: reserva.clientNumber,
-                    //deletedAt: null
-                }
+                    mesa: reserva.mesa,
+                },
             });
-            if (findReserva) return { status: 400, message: "Ja existe uma reserva para este numero" }
-            await this.reservaRepo.save(reserva);
-            return { status: 201, message: "Reservado com sucesso" }
+
+            for (const existingReserva of findReservas) {
+                const timeDifference = Math.abs(
+                    new Date(reserva.reservationDateTime).getTime() -
+                    new Date(existingReserva.reservationDateTime).getTime()
+                );
+                if (timeDifference < 2 * 60 * 60 * 1000) {
+                    return { status: 400, message: "Já existe uma reserva muito próxima para este horário." };
+                }
+            }
+            const createReserva = this.reservaRepo.create(
+                {
+                    clientName: reserva.clientName,
+                    clientNumber: reserva.clientNumber,
+                    reservationDateTime: reserva.reservationDateTime,
+                    createdAt: new Date(),
+                    updatedAt: new Date(),
+                    mesa: reserva.mesa,
+                },
+            )
+            await this.reservaRepo.save(createReserva);
+
+            return { status: 201, message: "Reservado com sucesso", data: createReserva }
         } catch (error) {
             return { status: 500, message: "Contactar o administrador" }
         }
     }
     async update(id: number, reserva: Reserva): Promise<IReturn<Reserva>> {
         try {
-            const findReserva = await this.reservaRepo.find({
+            const findReserva = await this.reservaRepo.findOne({
                 where: {
-                    clientNumber: reserva.clientNumber,
+                    id,
                     //deletedAt: null
                 }
             });

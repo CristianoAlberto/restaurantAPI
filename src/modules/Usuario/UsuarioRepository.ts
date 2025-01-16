@@ -23,7 +23,7 @@ export class UsuarioRepository implements IUsuario {
             user.password = ''
             return { token: this.token.createToken(user.id.toString()), status: 200, message: "Operação realizada com sucesso", data: user }
         } catch (error) {
-            return { status: 500, message: 'Contacte o administrador ou tente mais tarde' }
+            return { status: 500, message: `${error}` }
 
         }
     }

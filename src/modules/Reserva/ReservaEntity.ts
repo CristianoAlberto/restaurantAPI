@@ -1,10 +1,7 @@
-import { Column, Entity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ObjectIdColumn, ObjectId, PrimaryGeneratedColumn } from "typeorm";
-enum EstadoReserva {
-    Pendente = "Pendente",
-    Cancelado = "Cancelado",
-    Ocupado = "Ocupado",
-}
+import { Column, Entity, CreateDateColumn, UpdateDateColumn, DeleteDateColumn, ObjectIdColumn, ObjectId, PrimaryGeneratedColumn, ManyToOne, JoinColumn, Unique } from "typeorm";
+import { Mesa } from "../Mesa/MesaEntity";
 @Entity("Reserva")
+@Unique(["mesa", "reservationDateTime"])
 export class Reserva {
     @PrimaryGeneratedColumn()
     id: number;
@@ -12,31 +9,32 @@ export class Reserva {
     clientName: string;
     @Column()
     clientNumber: string;
-    @Column()
-    hour: string;
-    @Column()
-    estadoReserva: EstadoReserva;
+    @Column({ type: "timestamp" })
+    reservationDateTime: Date;
     @CreateDateColumn()
     createdAt: Date;
     @UpdateDateColumn()
     updatedAt: Date;
     @DeleteDateColumn()
-    deletedAt: Date;
+    deletedAt: Date | null;
+
+    @ManyToOne(() => Mesa, (mesa) => mesa.reservas, { eager: true })
+    @JoinColumn({ name: "mesaId" })
+    mesa: Mesa;
+
     constructor(
         id: number,
         clientName: string,
         clientNumber: string,
-        hour: string,
-        estadoReserva: EstadoReserva,
+        reservationDateTime: Date,
         createdAt: Date,
         updatedAt: Date,
-        deletedAt: Date,
+        deletedAt: Date | null,
     ) {
         this.id = id;
         this.clientName = clientName;
         this.clientNumber = clientNumber;
-        this.hour = hour;
-        this.estadoReserva = estadoReserva;
+        this.reservationDateTime = reservationDateTime;
         this.createdAt = createdAt
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;

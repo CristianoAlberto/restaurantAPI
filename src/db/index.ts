@@ -10,7 +10,7 @@ export const AppDataSource = new DataSource({
     username: process.env.DB_USER, // Usuário do banco
     password: process.env.DB_PASS, // Senha do banco
     database: process.env.MYSQL_DB, // Nome do banco de dados
-    synchronize: true, // Sincroniza entidades com o banco (ideal desativar em produção)
+    synchronize: false, // Sincroniza entidades com o banco (ideal desativar em produção)
     logging: true, // Ativa logs (ideal para desenvolvimento)
     entities: [Reserva, Mesa, Usuario], // Entidades que serão usadas
 });

@@ -5,7 +5,15 @@ export class MesaRepository implements IMesa {
     private readonly MesaRepo = AppDataSource.getRepository(Mesa);
     async create(mesa: Mesa): Promise<IReturn<Mesa>> {
         try {
-            await this.MesaRepo.save(mesa);
+            const criarMesa = await this.MesaRepo.create({
+                numero: mesa.numero,
+                capacidade: mesa.capacidade,
+                createdAt: new Date(),
+                updatedAt: new Date(),
+                deletedAt: null,
+                reservas: []
+            })
+            await this.MesaRepo.save(criarMesa);
             return { status: 201, message: "Mesa criada com sucesso" }
         } catch (error) {
             return { status: 500, message: "Contactar o administrador" }

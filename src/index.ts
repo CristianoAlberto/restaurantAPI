@@ -6,6 +6,7 @@ import helmet from "helmet"
 import rateLimit from "express-rate-limit"
 import cors from "cors"
 import router from "./router"
+import { seedUser } from "./utils/data"
 const app = express()
 
 app.use(helmet({ crossOriginResourcePolicy: false, }))
@@ -36,6 +37,8 @@ AppDataSource.initialize()
     })
 
 app.use(router);
+
+seedUser();
 
 app.listen(Number(process.env.PORT) | 3000, () => {
     console.log("Rodando api ", process.env.PORT || 3000)

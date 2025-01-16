@@ -14,14 +14,14 @@ export class Usuario {
     @UpdateDateColumn()
     updatedAt: Date;
     @DeleteDateColumn()
-    deletedAt: Date;
+    deletedAt: Date | null;
     constructor(
         id: number,
         name: string,
         password: string,
         createdAt: Date,
         updatedAt: Date,
-        deletedAt: Date,
+        deletedAt: Date | null,
     ) {
         this.id = id;
         this.name = name;
