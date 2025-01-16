@@ -23,12 +23,13 @@ export class MesaRepository implements IMesa {
         try {
             const findMesa = await this.MesaRepo.findOne({
                 where: {
-                    id: mesa.id,
+                    id,
                     //deletedAt: null
                 }
             });
             if (!findMesa) return { status: 404, message: "Não encontrado" }
-            await this.MesaRepo.save({ ...findMesa, ...Mesa })
+            mesa.updatedAt = new Date();
+            await this.MesaRepo.save({ ...findMesa, ...mesa })
             return { status: 200, message: "Actualizado com sucesso" }
         } catch (error) {
             return { status: 500, message: "Contactar o administrador" };
