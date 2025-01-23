@@ -18,13 +18,12 @@ export class UsuarioRepository implements IUsuario {
     async login(email: string, password: string) {
         try {
             const user = await this.usuarioRepo.findOne({ where: { email } });
-            if (!user) return { status: 401, message: 'Número/Password errada!' };
-            if (! await (this.encrypt.compareHash(password, user.password))) return { status: 401, message: 'Numero/Password errada!' }
+            if (!user) return { status: 401, message: 'Email/Password errada!' };
+            if (! await (this.encrypt.compareHash(password, user.password))) return { status: 401, message: 'Email/Password errada!' }
             user.password = ''
             return { token: this.token.createToken(user.id.toString()), status: 200, message: "Operação realizada com sucesso", data: user }
         } catch (error) {
             return { status: 500, message: `${error}` }
-
         }
     }
     async signUp(data: Usuario) {

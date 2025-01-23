@@ -3,9 +3,10 @@ import { AppDataSource } from "../../db";
 import { IMesa, IReturn } from "./MesaInterface";
 export class MesaRepository implements IMesa {
     private readonly MesaRepo = AppDataSource.getRepository(Mesa);
+
     async create(mesa: Mesa): Promise<IReturn<Mesa>> {
         try {
-            const criarMesa = await this.MesaRepo.create({
+            const criarMesa = this.MesaRepo.create({
                 numero: mesa.numero,
                 capacidade: mesa.capacidade,
                 createdAt: new Date(),
@@ -45,6 +46,10 @@ export class MesaRepository implements IMesa {
         }
     }
     async delete(id: number): Promise<IReturn<Mesa>> {
+        const mesa = await this.MesaRepo.findOne({ where: { id }, relations: ["reservas"] });
+        if (mesa?.reservas && mesa.reservas.length > 0) {
+            return { status: 400, message: "Não é possível excluir uma mesa com reservas ativas." }
+        }
         const softDelete = await this.update(id, { deletedAt: new Date() } as Mesa)
         return softDelete
     }

@@ -3,6 +3,5 @@ declare namespace Express {
         userId: number
         email: string
         token: string
-        file: string
     }
 }

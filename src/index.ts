@@ -30,6 +30,7 @@ app.use(limiter)
 
 AppDataSource.initialize()
     .then(async () => {
+        await seedUser();
         console.log("BD inicializado!");
     })
     .catch((err) => {
@@ -38,7 +39,6 @@ AppDataSource.initialize()
 
 app.use(router);
 
-seedUser();
 
 app.listen(Number(process.env.PORT) | 3000, () => {
     console.log("Rodando api ", process.env.PORT || 3000)
